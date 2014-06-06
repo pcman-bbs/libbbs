@@ -15,19 +15,28 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+#include "bbs-private.h"
 
-#include <bbs.h>
+#include <stdlib.h>
 
 struct BBSContext *bbs_new()
 {
-    return 0;
+    struct BBSContext *ctx = malloc(sizeof(*ctx));
+    if (!ctx) {
+        goto error;
+    }
+
+    return ctx;
+
+error:
+    bbs_delete(&ctx);
+    return ctx;
 }
 
 void bbs_delete(struct BBSContext **ctx)
 {
     if (*ctx) {
-        // FIXME: free BBSContext here
+        free(*ctx);
+        *ctx = 0;
     }
-
-    *ctx = 0;
 }
