@@ -17,9 +17,15 @@
  */
 #include <check.h>
 
-START_TEST(test_check)
+#include <bbs.h>
+
+START_TEST(test_new_delete)
 {
-    ck_assert(1);
+    struct BBSContext *ctx = bbs_new();
+    ck_assert_ptr_ne(ctx, 0);
+
+    bbs_delete(&ctx);
+    ck_assert_ptr_eq(ctx, 0);
 }
 END_TEST
 
@@ -27,7 +33,7 @@ int main (int argc, char *argv[]) {
     Suite *suite = suite_create("test");
 
     TCase *tcase = tcase_create("testcase");
-    tcase_add_test(tcase, test_check);
+    tcase_add_test(tcase, test_new_delete);
 
     suite_add_tcase(suite, tcase);
 
