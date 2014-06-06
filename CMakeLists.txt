@@ -12,14 +12,11 @@ include(GNUInstallDirs)
 if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
     set(CMAKE_C_FLAGS "-g -O2 -Wall -Werror -fPIC -std=c99 ${CMAKE_C_FLAGS}")
 
+    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--version-script=${PROJECT_SOURCE_DIR}/src/libbbs.ver ${CMAKE_SHARED_LINKER_FLAGS}")
+
     option(ENABLE_GCOV "Coverage support" false)
     if(ENABLE_GCOV)
         set(CMAKE_C_FLAGS "-coverage ${CMAKE_C_FLAGS}")
-    endif()
-
-    check_c_compiler_flag(-fvisibility=hidden FVISIBILITY_HIDDEN)
-    if(${FVISIBILITY_HIDDEN})
-        set(CMAKE_C_FLAGS "-fvisibility=hidden ${CMAKE_C_FLAGS}")
     endif()
 
     # Use NO_UNDEFINED=no when running with address sanitizer

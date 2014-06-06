@@ -1,0 +1,7 @@
+LIBBBS_0.0.0 {
+    global:
+        bbs_new;
+        bbs_delete;
+    local:
+        *;
+};
