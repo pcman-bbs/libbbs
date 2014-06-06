@@ -7,6 +7,7 @@ set(PROJECT_VERSION_PATCH "0")
 set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
 include(CheckCCompilerFlag)
+include(FindPkgConfig)
 include(GNUInstallDirs)
 
 if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
@@ -33,6 +34,11 @@ if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "Cla
     endif()
 endif()
 
+set(pkgconfig_src ${PROJECT_SOURCE_DIR}/bbs.pc.in)
+set(pkgconfig ${PROJECT_BINARY_DIR}/bbs.pc)
+configure_file(${pkgconfig_src} ${pkgconfig})
+
+# libbbs
 include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB bbs_inc ${PROJECT_SOURCE_DIR}/include/*)
 file(GLOB bbs_src ${PROJECT_SOURCE_DIR}/src/*)
@@ -42,15 +48,19 @@ set_target_properties(${bbs} PROPERTIES
     VERSION 0.0.0
 )
 
-set(pkgconfig_src ${PROJECT_SOURCE_DIR}/bbs.pc.in)
-set(pkgconfig ${PROJECT_BINARY_DIR}/bbs.pc)
-configure_file(${pkgconfig_src} ${pkgconfig})
-
 # testing
-enable_testing()
-file(GLOB test_src ${PROJECT_SOURCE_DIR}/tests/*)
-add_executable(test ${test_src})
-add_test(test ${test})
+pkg_check_modules(CHECK check)
+
+if ("${CHECK_FOUND}")
+    include_directories(${CHECK_INCLUDE_DIRS})
+
+    file(GLOB bbs_test_src ${PROJECT_SOURCE_DIR}/tests/*)
+    add_executable(bbs_test ${bbs_test_src})
+    target_link_libraries(bbs_test ${CHECK_LIBRARIES})
+
+    enable_testing()
+    #add_test(bbs-test ${bbs_test})
+endif()
 
 # install
 install(FILES ${bbs_inc} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bbs)
