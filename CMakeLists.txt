@@ -21,6 +21,19 @@ if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "Cla
     if(${FVISIBILITY_HIDDEN})
         set(CMAKE_C_FLAGS "-fvisibility=hidden ${CMAKE_C_FLAGS}")
     endif()
+
+    # Use NO_UNDEFINED=no when running with address sanitizer
+    option(NO_UNDEFINED "No undefined symbol in object file" true)
+    if(NO_UNDEFINED)
+        set(saved_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+        set(CMAKE_REQUIRED_FLAGS "-Wl,--no-undefined")
+        check_c_compiler_flag("" HAVE_NO_UNDEFINED)
+        set(CMAKE_REQUIRED_FLAGS ${saved_CMAKE_REQUIRED_FLAGS})
+
+        if(HAVE_NO_UNDEFINED)
+            set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
+        endif()
+    endif()
 endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
