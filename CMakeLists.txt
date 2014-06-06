@@ -59,7 +59,7 @@ if ("${CHECK_FOUND}")
     target_link_libraries(bbs_test ${CHECK_LIBRARIES})
 
     enable_testing()
-    add_test(bbs-test ${bbs_test})
+    add_test(bbs-test bbs_test)
 endif()
 
 # install
