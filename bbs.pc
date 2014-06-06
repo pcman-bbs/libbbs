@@ -1,0 +1,7 @@
+includedir=include
+libdir=lib/x86_64-linux-gnu
+
+Name: libbbs
+Requires:
+Libs: -L -lbbs
+Cflags: -I/bbs
