@@ -21,4 +21,4 @@ script:
     - cmake . $CMAKE_OPTIONS && make VERBOSE=1 && make test
 
 after_success:
-  - if [ x$COVERALLS == xyes ]; then coveralls --exclude tests; fi
+    - if [ x$COVERALLS == xyes ]; then coveralls --exclude tests --exclude-pattern '[^\.]*\.h' --exclude-pattern '.*CMake[^/]+\.c(?:pp)?'; fi
