@@ -11,7 +11,7 @@ include(GNUInstallDirs)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB bbs_inc ${PROJECT_SOURCE_DIR}/include/*)
 file(GLOB bbs_src ${PROJECT_SOURCE_DIR}/src/*)
-add_library(bbs ${bbs_src})
+add_library(bbs SHARED ${bbs_src})
 
 set(pkgconfig_src ${PROJECT_SOURCE_DIR}/bbs.pc.in)
 set(pkgconfig ${PROJECT_BINARY_DIR}/bbs.pc)
