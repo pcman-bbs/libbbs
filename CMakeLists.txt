@@ -56,10 +56,10 @@ if ("${CHECK_FOUND}")
 
     file(GLOB bbs_test_src ${PROJECT_SOURCE_DIR}/tests/*)
     add_executable(bbs_test ${bbs_test_src})
-    target_link_libraries(bbs_test ${CHECK_LIBRARIES})
+    target_link_libraries(bbs_test bbs ${CHECK_LIBRARIES} pthread)
 
     enable_testing()
-    add_test(bbs-test bbs_test)
+    add_test(bbs_test bbs_test)
 endif()
 
 # install
