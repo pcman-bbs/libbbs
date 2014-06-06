@@ -2,6 +2,7 @@ includedir=@CMAKE_INSTALL_INCLUDEDIR@
 libdir=@CMAKE_INSTALL_LIBDIR@
 
 Name: libbbs
-Requires: Bulletin Board System library
+Description: A telnet Bulletin Board System (BBS) helper library
+Requires:
 Libs: -L${libdir} -lbbs
 Cflags: -I${includedir}/bbs
