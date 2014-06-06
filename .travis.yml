@@ -18,7 +18,7 @@ before_install:
     - sudo apt-get install check cmake valgrind
 
 script:
-    - cmake . && make VERBOSE=1 $CMAKE_OPTIONS && make test
+    - cmake . $CMAKE_OPTIONS && make VERBOSE=1 && make test
 
 after_success:
   - if [ x$COVERALLS == xyes ]; then coveralls --exclude tests; fi
