@@ -15,4 +15,4 @@ before_install:
 
 script:
     - cmake .
-    - make
+    - make VERBOSE=1
