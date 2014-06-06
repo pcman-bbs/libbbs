@@ -6,13 +6,19 @@ env: CFLAGS='-Wall -Werror'
 
 matrix:
     include:
+        - compiler: clang
+          env: CFLAGS='-Wall -Werror -fsanitizer=address' CMAKE_OPTIONS='-DUSE_VALGRIND=no'
         - compiler: gcc
-          env: CFLAGS='-Wall -Werror'
+          env: CFLAGS='-Wall -Werror' COVERALLS=yes CMAKE_OPTIONS='-DENABLE_GCOV=yes -DUSE_VALGRIND=no'
 
 before_install:
+    - sudo pip install cpp-coveralls
     - sudo add-apt-repository --yes ppa:pcman-bbs/travis-ci
     - sudo apt-get update -qq
     - sudo apt-get install check cmake valgrind
 
 script:
-    - cmake . && make VERBOSE=1 && make test
+    - cmake . && make VERBOSE=1 $CMAKE_OPTIONS && make test
+
+after_success:
+  - if [ x$COVERALLS == xyes ]; then coveralls --exclude tests; fi
