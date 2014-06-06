@@ -1,4 +1,5 @@
 /bbs.pc
+/bbs_test
 /*.cmake
 /CMakeCache.txt
 /CMakeFiles/*
