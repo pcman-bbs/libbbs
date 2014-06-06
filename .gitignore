@@ -1,0 +1,6 @@
+/bbs.pc
+/*.cmake
+/CMakeCache.txt
+/CMakeFiles/*
+/libbbs*
+/Makefile
