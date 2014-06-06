@@ -12,7 +12,7 @@ matrix:
 before_install:
     - sudo add-apt-repository --yes ppa:pcman-bbs/travis-ci
     - sudo apt-get update -qq
-    - sudo apt-get install check cmake
+    - sudo apt-get install check cmake valgrind
 
 script:
     - cmake . && make VERBOSE=1 && make test
