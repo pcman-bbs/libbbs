@@ -7,7 +7,7 @@ env: CFLAGS='-Wall -Werror'
 matrix:
     include:
         - compiler: clang
-          env: CFLAGS='-Wall -Werror -fsanitizer=address' CMAKE_OPTIONS='-DUSE_VALGRIND=no'
+          env: CFLAGS='-Wall -Werror' CMAKE_OPTIONS='-DCMAKE_C_FLAGS=-fsanitize=address -DUSE_VALGRIND=no'
         - compiler: gcc
           env: CFLAGS='-Wall -Werror' COVERALLS=yes CMAKE_OPTIONS='-DENABLE_GCOV=yes -DUSE_VALGRIND=no'
 
