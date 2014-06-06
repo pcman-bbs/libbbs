@@ -27,14 +27,14 @@ int main (int argc, char *argv[]) {
     Suite *suite = suite_create("test");
 
     TCase *tcase = tcase_create("testcase");
-    tcase_add_test(tcase, test_check)
+    tcase_add_test(tcase, test_check);
 
     suite_add_tcase(suite, tcase);
 
     SRunner *runner = srunner_create(suite);
     srunner_run_all(runner, CK_NORMAL);
 
-    number_failed = srunner_ntests_failed(runner);
+    int number_failed = srunner_ntests_failed(runner);
     srunner_free(runner);
 
     return !!number_failed;
