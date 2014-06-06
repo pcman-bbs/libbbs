@@ -50,7 +50,7 @@ configure_file(${pkgconfig_src} ${pkgconfig})
 enable_testing()
 file(GLOB test_src ${PROJECT_SOURCE_DIR}/tests/*)
 add_executable(test ${test_src})
-#add_test(test ${test})
+add_test(test ${test})
 
 # install
 install(FILES ${bbs_inc} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bbs)
