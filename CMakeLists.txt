@@ -59,7 +59,17 @@ if ("${CHECK_FOUND}")
     target_link_libraries(bbs_test bbs ${CHECK_LIBRARIES} pthread)
 
     enable_testing()
-    add_test(bbs_test bbs_test)
+    add_test(bbs-test bbs_test)
+
+    option(USE_VALGRIND "Use valgrind when testing" true)
+
+    if(USE_VALGRIND)
+        find_program(VALGRIND valgrind)
+        if(VALGRIND)
+                add_test(valgrind-bbs-test bbs_test)
+        endif()
+    endif()
+
 endif()
 
 # install
