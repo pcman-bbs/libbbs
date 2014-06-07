@@ -15,28 +15,18 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#pragma once
+#include "bbs-private.h"
 
-#include <string.h>
+int bbs_big5_to_utf8(struct BBSContext *ctx, const char *big5, char *utf8, size_t utf8_len)
+{
+    if (!ctx) {
+        return BBS_ERROR;
+    }
+}
 
-struct BBSContext;
-
-enum {
-    BBS_LOG_LEVEL_VERBOSE  = 1,
-    BBS_LOG_LEVEL_DEBUG    = 2,
-    BBS_LOG_LEVEL_INFO     = 3,
-    BBS_LOG_LEVEL_WARN     = 4,
-    BBS_LOG_LEVEL_ERROR    = 5,
-};
-
-enum {
-    BBS_ERROR = -1,
-};
-
-typedef void (*BBSLogger)(void *data, int level, const char *fmt, ...);
-
-struct BBSContext *bbs_new(BBSLogger logger, void *logger_data);
-void bbs_delete(struct BBSContext **ctx);
-
-int bbs_big5_to_utf8(struct BBSContext *ctx, const char *big5, char *utf8, size_t utf8_len);
-int bbs_utf8_to_big5(struct BBSContext *ctx, const char *utf8, char *big5, size_t big5_len);
+int bbs_utf8_to_big5(struct BBSContext *ctx, const char *utf8, char *big5, size_t big5_len)
+{
+    if (!ctx) {
+        return BBS_ERROR;
+    }
+}
