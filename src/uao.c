@@ -16,9 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include <assert.h>
-#include <string.h>
-
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "bbs-private.h"
 #include "uao_table.h"
@@ -27,17 +27,17 @@
 struct Config {
     struct Big5_UTF8_Table *table;
     size_t table_len;
-    int (*compare)(void *a, void *b);
+    int (*compare)(const void *a, const void *b);
     int (*copy_input)(const char *input, char input_buf[static 5]);
-    int (*get_output)(const struct Big5_UTF8_Table *table, char *output, size_t output_len);
+    const char *(*get_output)(const struct Big5_UTF8_Table *table);
 };
 
 const char UNKNOWN_CHAR = '?';
 
-static int big5_to_utf8_compare(void *x, void *y)
+static int big5_to_utf8_compare(const void *x, const void *y)
 {
     return strcmp(
-        ((struct Big5_UTF8_Table *)x)->big5,
+        (char *) x,
         ((struct Big5_UTF8_Table *)y)->big5);
 }
 
@@ -63,10 +63,9 @@ static int big5_to_utf8_copy_input(const char *input, char input_buf[static 3])
     return 1;
 }
 
-static int big5_to_utf8_get_output(const struct Big5_UTF8_Table *table, char *output, size_t output_len)
+static const char* big5_to_utf8_get_output(const struct Big5_UTF8_Table *table)
 {
-    strncpy(output, table->utf8, output_len);
-    return strlen(table->utf8);
+    return table->utf8;
 }
 
 const struct Config BIG5_TO_UTF8_CONFIG = {
@@ -77,10 +76,10 @@ const struct Config BIG5_TO_UTF8_CONFIG = {
     big5_to_utf8_get_output,
 };
 
-static int utf8_to_big5_compare(void *x, void *y)
+static int utf8_to_big5_compare(const void *x, const void *y)
 {
     return strcmp(
-        ((struct Big5_UTF8_Table *)x)->utf8,
+        (char *) x,
         ((struct Big5_UTF8_Table *)y)->utf8);
 }
 
@@ -99,10 +98,9 @@ static int utf8_to_big5_copy_input(const char *input, char input_buf[static 3])
     return 1;
 }
 
-static int utf8_to_big5_get_output(const struct Big5_UTF8_Table *table, char *output, size_t output_len)
+static const char* utf8_to_big5_get_output(const struct Big5_UTF8_Table *table)
 {
-    strncpy(output, table->big5, output_len);
-    return strlen(table->big5);
+    return table->big5;
 }
 
 const struct Config UTF8_TO_BIG5_CONFIG = {
@@ -112,6 +110,20 @@ const struct Config UTF8_TO_BIG5_CONFIG = {
     utf8_to_big5_copy_input,
     utf8_to_big5_get_output,
 };
+
+#define UPDATE_OUTPUT(output, output_len, input) \
+    do { \
+        int len = strlen(input); \
+        if (output_len > len) { \
+            memcpy(output, input, len); \
+            output_len -= len; \
+            output += len; \
+        } else if (output_len > 0) { \
+            output[0] = 0; \
+            output_len = 0; \
+        } \
+        final_len += len; \
+    } while (0)
 
 static int convert(const struct Config *config, const char *input, char *output, size_t output_len)
 {
@@ -123,28 +135,32 @@ static int convert(const struct Config *config, const char *input, char *output,
     }
 
     int final_len = 0;
-    char input_buf[5];
+    char buf[5];
 
     while (input[0]) {
-        int len = config->copy_input(input, input_buf);
+        int input_len = config->copy_input(input, buf);
 
-        if (len == 1) {
+        printf("input_len = %d, buf = %s\n", input_len, buf);
+
+        if (input_len == 1) {
             // ASCII
-
-            if (output_len > len) {
-                strncpy(output, input_buf, output_len);
-                output += len;
-                output_len -= len;
-            } else {
-                output_len = 0;
-            }
-
+            printf("output = %p, output_len = %zd\n", output, output_len);
+            UPDATE_OUTPUT(output, output_len, buf);
         } else {
-            // FIXME: convert input_buf
+            struct Big5_UTF8_Table *res = bsearch(buf, config->table, config->table_len, sizeof(config->table[0]), config->compare);
+
+            if (res) {
+                UPDATE_OUTPUT(output, output_len, config->get_output(res));
+            } else {
+                UPDATE_OUTPUT(output, output_len, &UNKNOWN_CHAR);
+            }
         }
 
-        input += len;
-        final_len += len;
+        if (output_len > 0) {
+            output[0] = 0;
+        }
+
+        input += input_len;
     }
 
     return final_len;
