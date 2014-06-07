@@ -30,9 +30,9 @@ START_TEST(test_new_delete)
 END_TEST
 
 int main (int argc, char *argv[]) {
-    Suite *suite = suite_create("test");
+    Suite *suite = suite_create("test-bbs");
 
-    TCase *tcase = tcase_create("testcase");
+    TCase *tcase = tcase_create("new/delete");
     tcase_add_test(tcase, test_new_delete);
 
     suite_add_tcase(suite, tcase);
