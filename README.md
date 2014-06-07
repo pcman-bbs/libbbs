@@ -29,4 +29,5 @@ Please report feature request and/or issue in <https://github.com/pcman-bbs/libb
 
 # License
 
-This project is licensed under [LGPL-2.1](https://github.com/pcman-bbs/libbbs/blob/master/COPYING)
+*   This project is licensed under [LGPL-2.1](https://github.com/pcman-bbs/libbbs/blob/master/COPYING)
+*   `data/uao` is provided by [moztw](http://moztw.org/docs/big5/), and they are licensed under [CC BY-SA 3.0 TW](http://creativecommons.org/licenses/by-sa/3.0/tw/)
