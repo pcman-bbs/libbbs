@@ -19,6 +19,14 @@
 
 struct BBSContext;
 
+enum {
+    BBS_LOG_LEVEL_VERBOSE  = 1,
+    BBS_LOG_LEVEL_DEBUG    = 2,
+    BBS_LOG_LEVEL_INFO     = 3,
+    BBS_LOG_LEVEL_WARN     = 4,
+    BBS_LOG_LEVEL_ERROR    = 5,
+};
+
 typedef void (*BBSLogger)(void *data, int level, const char *fmt, ...);
 
 struct BBSContext *bbs_new(BBSLogger logger, void *logger_data);
