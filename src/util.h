@@ -17,5 +17,15 @@
  */
 #pragma once
 
+#define LOG_VERBOSE(fmt, ...) \
+    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_VERBOSE, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
+#define LOG_DEBUG(fmt, ...) \
+    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_DEBUG, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
+#define LOG_INFO(fmt, ...) \
+    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_INFO, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
+#define LOG_WARN(fmt, ...) \
+    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_WARN, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
+#define LOG_ERROR(fmt, ...) \
+    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_ERROR, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
 
 void null_logger(void *data, int level, const char *fmt, ...);

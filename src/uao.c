@@ -16,12 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "bbs-private.h"
+#include "util.h"
 
 int bbs_big5_to_utf8(struct BBSContext *ctx, const char *big5, char *utf8, size_t utf8_len)
 {
     if (!ctx) {
         return BBS_ERROR;
     }
+
+    LOG_VERBOSE("API call: " __FUNC__);
+
+    return 0; // FIXME: shall return length of output buffer
 }
 
 int bbs_utf8_to_big5(struct BBSContext *ctx, const char *utf8, char *big5, size_t big5_len)
@@ -29,4 +34,8 @@ int bbs_utf8_to_big5(struct BBSContext *ctx, const char *utf8, char *big5, size_
     if (!ctx) {
         return BBS_ERROR;
     }
+
+    LOG_VERBOSE("API call: " __FUNC__);
+
+    return 0; // FIXME: shall return length of output buffer
 }

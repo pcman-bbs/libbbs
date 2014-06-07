@@ -28,8 +28,10 @@ struct BBSContext *bbs_new(BBSLogger logger, void *logger_data)
         goto error;
     }
 
-    ctx->logger = logger;
+    ctx->logger = logger ? logger : null_logger;
     ctx->logger_data = logger_data;
+
+    LOG_VERBOSE("API call: " __FUNC__);
 
     return ctx;
 
@@ -38,10 +40,12 @@ error:
     return ctx;
 }
 
-void bbs_delete(struct BBSContext **ctx)
+void bbs_delete(struct BBSContext **ctx_p)
 {
-    if (*ctx) {
-        free(*ctx);
-        *ctx = 0;
+    if (ctx_p && *ctx_p) {
+        struct BBSContext *ctx = *ctx_p;
+        LOG_VERBOSE("API call: " __FUNC__);
+        free(ctx);
+        *ctx_p = 0;
     }
 }
