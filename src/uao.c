@@ -70,15 +70,41 @@ const struct Config BIG5_TO_UTF8_CONFIG = {
     big5_to_utf8_get_output,
 };
 
-#define UPDATE_OUTPUT(len, output_ptr, output_len, input_ptr, input_len) \
-    do { \
-        if (output_len >= input_len) { \
-            memcpy(output_ptr, input_ptr, input_len); \
-            output_len -= input_len; \
-            output_ptr += input_len; \
-        } \
-        len += input_len; \
-    } while (0)
+static int utf8_to_big5_compare(void *x, void *y)
+{
+    return strcmp(
+        ((struct Big5_UTF8_Table *)x)->utf8,
+        ((struct Big5_UTF8_Table *)y)->utf8);
+}
+
+static int utf8_to_big5_copy_input(const char *input, char input_buf[static 3])
+{
+    assert(input);
+
+    if (input[0] & 0x80) {
+        // FIXME: copy single UTF8 character
+        // FIXME: How to handle UTF8 encode error?
+        return 0;
+    }
+
+    input_buf[0] = input[0];
+    input_buf[1] = 0;
+    return 1;
+}
+
+static int utf8_to_big5_get_output(const struct Big5_UTF8_Table *table, char *output, size_t output_len)
+{
+    strncpy(output, output_len, table->big5);
+    return strlen(table->big5);
+}
+
+const struct Config UTF8_TO_BIG5_CONFIG = {
+    UTF8_TO_BIG5_COMMON,
+    ARRAY_SIZE(UTF8_TO_BIG5_COMMON),
+    utf8_to_big5_compare,
+    utf8_to_big5_copy_input,
+    utf8_to_big5_get_output,
+};
 
 static int convert(const struct Config *config, const char *input, char *output, size_t output_len)
 {
@@ -136,23 +162,5 @@ int bbs_utf8_to_big5(struct BBSContext *ctx, const char *utf8, char *big5, size_
 
     LOG_VERBOSE("API call: " __FUNC__);
 
-    if (!big5) {
-        big5_len = 0;
-    }
-
-    int len = 0;
-
-    while(utf8[0] != 0) {
-        if (utf8[0] & 0x80) {
-            // FIXME: convert big5 into utf8
-        } else {
-            // ASCII
-            UPDATE_OUTPUT(len, big5, big5_len, utf8, 1);
-            ++utf8;
-        }
-    }
-
-    UPDATE_OUTPUT(len, big5, big5_len, "", 1);
-
-    return len;
+    return convert(&UTF8_TO_BIG5_CONFIG, utf8, big5, big5_len);
 }
