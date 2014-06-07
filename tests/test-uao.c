@@ -27,66 +27,52 @@ const char UTF8_DUPLICATED[] = "\xef\xa8\x8c\xe5\x85\x80 \xef\xa8\x8d\xe5\x97\x8
 
 START_TEST(test_big5_to_utf8)
 {
-    struct BBSContext *ctx = bbs_new(0, 0);
     char buf[100];
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, BIG5_STRING, buf, sizeof(buf)), strlen(UTF8_STRING));
+    ck_assert_int_eq(bbs_big5_to_utf8(BIG5_STRING, buf, sizeof(buf)), strlen(UTF8_STRING));
     ck_assert_str_eq(buf, UTF8_STRING);
-    bbs_delete(&ctx);
 }
 END_TEST
 
 START_TEST(test_big5_to_utf8_duplicated)
 {
-    struct BBSContext *ctx = bbs_new(0, 0);
     char buf[100];
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, BIG5_DUPLICATED, buf, sizeof(buf)), strlen(UTF8_DUPLICATED));
+    ck_assert_int_eq(bbs_big5_to_utf8(BIG5_DUPLICATED, buf, sizeof(buf)), strlen(UTF8_DUPLICATED));
     ck_assert_str_eq(buf, UTF8_DUPLICATED);
-    bbs_delete(&ctx);
 }
 END_TEST
 
 START_TEST(test_big5_to_utf8_output_not_enough)
 {
-    struct BBSContext *ctx = bbs_new(0, 0);
     char buf[5];
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, BIG5_STRING, buf, sizeof(buf)), strlen(UTF8_STRING));
-    bbs_delete(&ctx);
+    ck_assert_int_eq(bbs_big5_to_utf8(BIG5_STRING, buf, sizeof(buf)), strlen(UTF8_STRING));
 }
 END_TEST
 
 START_TEST(test_big5_to_utf8_no_output)
 {
-    struct BBSContext *ctx = bbs_new(0, 0);
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, BIG5_STRING, 0, 0), strlen(UTF8_STRING));
-    bbs_delete(&ctx);
+    ck_assert_int_eq(bbs_big5_to_utf8(BIG5_STRING, 0, 0), strlen(UTF8_STRING));
 }
 END_TEST
 
 START_TEST(test_big5_to_utf8_broken_big5)
 {
-    struct BBSContext *ctx = bbs_new(0, 0);
     char utf8[5];
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, "\x81", utf8, sizeof(utf8)), 1);
+    ck_assert_int_eq(bbs_big5_to_utf8("\x81", utf8, sizeof(utf8)), 1);
     ck_assert_str_eq(utf8, "?");
-    bbs_delete(&ctx);
 }
 END_TEST
 
 START_TEST(test_utf8_to_big5_no_output_ascii)
 {
-    struct BBSContext *ctx = bbs_new(0, 0);
-    ck_assert_int_eq(bbs_utf8_to_big5(ctx, "test", 0, 0), 4);
-    bbs_delete(&ctx);
+    ck_assert_int_eq(bbs_utf8_to_big5("test", 0, 0), 4);
 }
 END_TEST
 
 START_TEST(test_utf8_to_big5_ascii)
 {
-    struct BBSContext *ctx = bbs_new(0, 0);
     char big5[5];
-    ck_assert_int_eq(bbs_utf8_to_big5(ctx, "test", big5, sizeof(big5)), 4);
+    ck_assert_int_eq(bbs_utf8_to_big5("test", big5, sizeof(big5)), 4);
     ck_assert_str_eq(big5, "test");
-    bbs_delete(&ctx);
 }
 END_TEST
 

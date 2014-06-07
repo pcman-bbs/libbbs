@@ -163,24 +163,20 @@ static int convert(const struct Config *config, const char *input, char *output,
     return final_len;
 }
 
-int bbs_big5_to_utf8(struct BBSContext *ctx, const char *big5, char *utf8, size_t utf8_len)
+int bbs_big5_to_utf8(const char *big5, char *utf8, size_t utf8_len)
 {
-    if (!ctx) {
+    if (!big5) {
         return BBS_ERROR;
     }
-
-    LOG_VERBOSE("API call: " __FUNC__);
 
     return convert(&BIG5_TO_UTF8_CONFIG, big5, utf8, utf8_len);
 }
 
-int bbs_utf8_to_big5(struct BBSContext *ctx, const char *utf8, char *big5, size_t big5_len)
+int bbs_utf8_to_big5(const char *utf8, char *big5, size_t big5_len)
 {
-    if (!ctx) {
+    if (!utf8) {
         return BBS_ERROR;
     }
-
-    LOG_VERBOSE("API call: " __FUNC__);
 
     return convert(&UTF8_TO_BIG5_CONFIG, utf8, big5, big5_len);
 }

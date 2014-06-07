@@ -38,5 +38,5 @@ typedef void (*BBSLogger)(void *data, int level, const char *fmt, ...);
 struct BBSContext *bbs_new(BBSLogger logger, void *logger_data);
 void bbs_delete(struct BBSContext **ctx);
 
-int bbs_big5_to_utf8(struct BBSContext *ctx, const char *big5, char *utf8, size_t utf8_len);
-int bbs_utf8_to_big5(struct BBSContext *ctx, const char *utf8, char *big5, size_t big5_len);
+int bbs_big5_to_utf8(const char *big5, char *utf8, size_t utf8_len);
+int bbs_utf8_to_big5(const char *utf8, char *big5, size_t big5_len);

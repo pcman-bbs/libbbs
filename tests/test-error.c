@@ -21,8 +21,8 @@
 
 START_TEST(test_null_ctx)
 {
-    ck_assert_int_eq(bbs_big5_to_utf8(0, "", 0, 0), BBS_ERROR);
-    ck_assert_int_eq(bbs_utf8_to_big5(0, "", 0, 0), BBS_ERROR);
+    ck_assert_int_eq(bbs_big5_to_utf8(0, 0, 0), BBS_ERROR);
+    ck_assert_int_eq(bbs_utf8_to_big5(0, 0, 0), BBS_ERROR);
 }
 END_TEST
 
