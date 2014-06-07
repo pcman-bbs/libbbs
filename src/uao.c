@@ -48,15 +48,16 @@ int bbs_big5_to_utf8(struct BBSContext *ctx, const char *big5, char *utf8, size_
     int len = 0;
 
     while(big5[0] != 0) {
-        if (!(big5[0] & 0x80)) {
-            // ASCII
+        if (big5[0] & 0x80) {
+            // FIXME: convert big5 into utf8
+        } else { // ASCII
             UPDATE_OUTPUT(len, utf8, utf8_len, big5, 1);
             ++big5;
-            continue;
         }
 
-        // FIXME: convert big5 into utf8
     }
+
+    UPDATE_OUTPUT(len, utf8, utf8_len, "", 1);
 
     return len;
 }
@@ -76,15 +77,16 @@ int bbs_utf8_to_big5(struct BBSContext *ctx, const char *utf8, char *big5, size_
     int len = 0;
 
     while(utf8[0] != 0) {
-        if (!(utf8[0] & 0x80)) {
+        if (utf8[0] & 0x80) {
+            // FIXME: convert big5 into utf8
+        } else {
             // ASCII
             UPDATE_OUTPUT(len, big5, big5_len, utf8, 1);
             ++utf8;
-            continue;
         }
-
-        // FIXME: convert big5 into utf8
     }
+
+    UPDATE_OUTPUT(len, big5, big5_len, "", 1);
 
     return len;
 }

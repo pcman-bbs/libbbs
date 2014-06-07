@@ -22,7 +22,7 @@
 START_TEST(test_big5_to_utf8_no_output_ascii)
 {
     struct BBSContext *ctx = bbs_new(0, 0);
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, "test", 0, 0), 4);
+    ck_assert_int_eq(bbs_big5_to_utf8(ctx, "test", 0, 0), 5);
     bbs_delete(&ctx);
 }
 END_TEST
@@ -31,7 +31,7 @@ START_TEST(test_big5_to_utf8_ascii)
 {
     struct BBSContext *ctx = bbs_new(0, 0);
     char utf8[5];
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, "test", utf8, sizeof(utf8)), 4);
+    ck_assert_int_eq(bbs_big5_to_utf8(ctx, "test", utf8, sizeof(utf8)), 5);
     ck_assert_str_eq(utf8, "test");
     bbs_delete(&ctx);
 }
@@ -40,7 +40,7 @@ END_TEST
 START_TEST(test_utf8_to_big5_no_output_ascii)
 {
     struct BBSContext *ctx = bbs_new(0, 0);
-    ck_assert_int_eq(bbs_utf8_to_big5(ctx, "test", 0, 0), 4);
+    ck_assert_int_eq(bbs_utf8_to_big5(ctx, "test", 0, 0), 5);
     bbs_delete(&ctx);
 }
 END_TEST
@@ -49,7 +49,7 @@ START_TEST(test_utf8_to_big5_ascii)
 {
     struct BBSContext *ctx = bbs_new(0, 0);
     char big5[5];
-    ck_assert_int_eq(bbs_utf8_to_big5(ctx, "test", big5, sizeof(big5)), 4);
+    ck_assert_int_eq(bbs_utf8_to_big5(ctx, "test", big5, sizeof(big5)), 5);
     ck_assert_str_eq(big5, "test");
     bbs_delete(&ctx);
 }
