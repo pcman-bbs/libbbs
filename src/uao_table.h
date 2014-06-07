@@ -3,13 +3,13 @@
 #pragma once
 
 enum {
-    UTF8_SIZE = 4,
-    BIG5_SIZE = 2,
+    UTF8_SIZE = 4 + 1,
+    BIG5_SIZE = 2 + 1,
 };
 
 struct Big5_UTF8_Table {
-    unsigned char big5[BIG5_SIZE];
-    unsigned char utf8[UTF8_SIZE];
+    char big5[BIG5_SIZE];
+    char utf8[UTF8_SIZE];
 };
         
 struct Big5_UTF8_Table BIG5_TO_UTF8_COMMON[] = {
