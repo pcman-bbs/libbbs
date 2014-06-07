@@ -54,22 +54,25 @@ pkg_check_modules(CHECK check)
 if ("${CHECK_FOUND}")
     include_directories(${CHECK_INCLUDE_DIRS})
 
-    file(GLOB bbs_test_src ${PROJECT_SOURCE_DIR}/tests/*)
-    add_executable(bbs_test ${bbs_test_src})
-    target_link_libraries(bbs_test bbs ${CHECK_LIBRARIES} pthread)
-
     enable_testing()
-    add_test(bbs-test bbs_test)
-
     option(USE_VALGRIND "Use valgrind when testing" true)
 
-    if(USE_VALGRIND)
+    if (USE_VALGRIND)
         find_program(VALGRIND valgrind)
-        if(VALGRIND)
-                add_test(valgrind-bbs-test bbs_test)
-        endif()
     endif()
 
+    file(GLOB bbs_test_src ${PROJECT_SOURCE_DIR}/tests/*)
+
+    foreach(test_src ${bbs_test_src})
+        get_filename_component(test_name ${test_src} NAME_WE)
+        add_executable(${test_name} ${test_src})
+        target_link_libraries(${test_name} bbs ${CHECK_LIBRARIES} pthread)
+
+        add_test(${test_name} ${test_name})
+        if (VALGRIND)
+            add_test("valgrind-${test_name}" ${VALGRIND} --error-exitcode=255 --leak-check=full ${PROJECT_BINARY_DIR}/${test_name})
+        endif()
+    endforeach()
 endif()
 
 # install

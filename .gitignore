@@ -1,8 +1,8 @@
 /bbs.pc
-/bbs_test
 /*.cmake
 /CMakeCache.txt
 /CMakeFiles/*
 /libbbs*
 /Makefile
+/test*
 /Testing
