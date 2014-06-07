@@ -69,8 +69,8 @@ static const char* big5_to_utf8_get_output(const struct Big5_UTF8_Table *table)
 }
 
 const struct Config BIG5_TO_UTF8_CONFIG = {
-    BIG5_TO_UTF8_COMMON,
-    ARRAY_SIZE(BIG5_TO_UTF8_COMMON),
+    BIG5_TO_UTF8_TABLE,
+    ARRAY_SIZE(BIG5_TO_UTF8_TABLE),
     big5_to_utf8_compare,
     big5_to_utf8_copy_input,
     big5_to_utf8_get_output,
@@ -104,8 +104,8 @@ static const char* utf8_to_big5_get_output(const struct Big5_UTF8_Table *table)
 }
 
 const struct Config UTF8_TO_BIG5_CONFIG = {
-    UTF8_TO_BIG5_COMMON,
-    ARRAY_SIZE(UTF8_TO_BIG5_COMMON),
+    UTF8_TO_BIG5_TABLE,
+    ARRAY_SIZE(UTF8_TO_BIG5_TABLE),
     utf8_to_big5_compare,
     utf8_to_big5_copy_input,
     utf8_to_big5_get_output,
