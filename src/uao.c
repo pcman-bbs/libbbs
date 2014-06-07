@@ -32,6 +32,8 @@ struct Config {
     int (*get_output)(const struct Big5_UTF8_Table *table, char *output, size_t output_len);
 };
 
+const char UNKNOWN_CHAR = '?';
+
 static int big5_to_utf8_compare(void *x, void *y)
 {
     return strcmp(
@@ -43,13 +45,18 @@ static int big5_to_utf8_copy_input(const char *input, char input_buf[static 3])
 {
     assert(input);
 
-    if ((input[0] & 0x80) && input[1]) {
-        memcpy(input_buf, input, 2);
-        input_buf[2] = 0;
-        return 2;
+    if (input[0] & 0x80) {
+        if (input[1]) {
+            memcpy(input_buf, input, 2);
+            input_buf[2] = 0;
+            return 2;
+        } else {
+            // Broken big5.
+            input_buf[0] = UNKNOWN_CHAR;
+            input_buf[1] = 0;
+            return 1;
+        }
     }
-
-    // FIXME: How to handle first byte >= 0x80 but second byte is 0x00?
 
     input_buf[0] = input[0];
     input_buf[1] = 0;
