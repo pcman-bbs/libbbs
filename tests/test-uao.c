@@ -37,6 +37,16 @@ START_TEST(test_big5_to_utf8_ascii)
 }
 END_TEST
 
+START_TEST(test_big5_to_utf8_broken_big5)
+{
+    struct BBSContext *ctx = bbs_new(0, 0);
+    char utf8[5];
+    ck_assert_int_eq(bbs_big5_to_utf8(ctx, "\x81", utf8, sizeof(utf8)), 1);
+    ck_assert_str_eq(utf8, "?");
+    bbs_delete(&ctx);
+}
+END_TEST
+
 START_TEST(test_utf8_to_big5_no_output_ascii)
 {
     struct BBSContext *ctx = bbs_new(0, 0);
@@ -61,6 +71,7 @@ int main (int argc, char *argv[]) {
     TCase *tcase_bbs_big5_to_utf8 = tcase_create("bbs_big5_to_utf8");
     tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_no_output_ascii);
     tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_ascii);
+    tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_broken_big5);
 
     TCase *tcase_bbs_utf8_to_big5 = tcase_create("bbs_utf8_to_big5");
     tcase_add_test(tcase_bbs_utf8_to_big5, test_utf8_to_big5_no_output_ascii);
