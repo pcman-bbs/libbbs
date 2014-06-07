@@ -7,6 +7,22 @@ A telnet Bulletin Board System (BBS) helper library. This library provides the f
 *   Unicode-at-on (UAO)
 *   ASCII art
 
+# Development
+
+The project depends on the following libraries:
+*   check (optional)
+*   cmake
+*   pkg-config
+*   valgrind (optional)
+
+You can use the standard cmake way to build the project:
+
+```
+cmake .
+make
+make test
+```
+
 # Feature Request & Issue
 
 Please report feature request and/or issue in <https://github.com/pcman-bbs/libbbs/issues>.
