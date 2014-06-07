@@ -82,13 +82,13 @@ def main():
 #pragma once
 
 enum {
-    UTF8_SIZE = 4,
-    BIG5_SIZE = 2,
+    UTF8_SIZE = 4 + 1,
+    BIG5_SIZE = 2 + 1,
 };
 
 struct Big5_UTF8_Table {
-    unsigned char big5[BIG5_SIZE];
-    unsigned char utf8[UTF8_SIZE];
+    char big5[BIG5_SIZE];
+    char utf8[UTF8_SIZE];
 };
         '''
         print(content, file=f)
