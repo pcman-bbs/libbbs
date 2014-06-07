@@ -19,20 +19,32 @@
 
 #include <bbs.h>
 
-START_TEST(test_big5_to_utf8_no_output_ascii)
+const char BIG5_STRING[] = "convert test string: \x81\x40\xa0\xa6\xa0\xa7\x98\x41!";
+const char UTF8_STRING[] = "convert test string: \xe4\xb8\x97\xee\xb9\x9f\xc3\x80\xe2\x9d\xb6!";
+
+START_TEST(test_big5_to_utf8)
 {
     struct BBSContext *ctx = bbs_new(0, 0);
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, "test", 0, 0), 4);
+    char buf[100];
+    ck_assert_int_eq(bbs_big5_to_utf8(ctx, BIG5_STRING, buf, sizeof(buf)), strlen(UTF8_STRING));
+    ck_assert_str_eq(buf, UTF8_STRING);
     bbs_delete(&ctx);
 }
 END_TEST
 
-START_TEST(test_big5_to_utf8_ascii)
+START_TEST(test_big5_to_utf8_output_not_enough)
 {
     struct BBSContext *ctx = bbs_new(0, 0);
-    char utf8[5];
-    ck_assert_int_eq(bbs_big5_to_utf8(ctx, "test", utf8, sizeof(utf8)), 4);
-    ck_assert_str_eq(utf8, "test");
+    char buf[5];
+    ck_assert_int_eq(bbs_big5_to_utf8(ctx, BIG5_STRING, buf, sizeof(buf)), strlen(UTF8_STRING));
+    bbs_delete(&ctx);
+}
+END_TEST
+
+START_TEST(test_big5_to_utf8_no_output)
+{
+    struct BBSContext *ctx = bbs_new(0, 0);
+    ck_assert_int_eq(bbs_big5_to_utf8(ctx, BIG5_STRING, 0, 0), strlen(UTF8_STRING));
     bbs_delete(&ctx);
 }
 END_TEST
@@ -69,8 +81,9 @@ int main (int argc, char *argv[]) {
     Suite *suite = suite_create("test-uao");
 
     TCase *tcase_bbs_big5_to_utf8 = tcase_create("bbs_big5_to_utf8");
-    tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_no_output_ascii);
-    tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_ascii);
+    tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8);
+    tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_output_not_enough);
+    tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_no_output);
     tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_broken_big5);
 
     TCase *tcase_bbs_utf8_to_big5 = tcase_create("bbs_utf8_to_big5");
