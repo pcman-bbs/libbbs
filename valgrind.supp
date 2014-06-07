@@ -1,0 +1,8 @@
+{
+   [check] srunner_run -> timer_create
+   Memcheck:Param
+   timer_create(evp)
+   fun:timer_create*
+   fun:srunner_run
+   fun:main
+}

@@ -70,7 +70,7 @@ if ("${CHECK_FOUND}")
 
         add_test(${test_name} ${test_name})
         if (VALGRIND)
-            add_test("valgrind-${test_name}" ${VALGRIND} --error-exitcode=255 --leak-check=full ${PROJECT_BINARY_DIR}/${test_name})
+            add_test("valgrind-${test_name}" ${VALGRIND} --error-exitcode=255 --leak-check=full --suppressions=${PROJECT_SOURCE_DIR}/valgrind.supp ${PROJECT_BINARY_DIR}/${test_name})
         endif()
     endforeach()
 endif()
