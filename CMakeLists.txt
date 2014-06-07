@@ -57,6 +57,8 @@ if ("${CHECK_FOUND}")
     enable_testing()
     option(USE_VALGRIND "Use valgrind when testing" true)
 
+    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+
     if (USE_VALGRIND)
         find_program(VALGRIND valgrind)
     endif()
@@ -66,6 +68,7 @@ if ("${CHECK_FOUND}")
     foreach(test_src ${bbs_test_src})
         get_filename_component(test_name ${test_src} NAME_WE)
         add_executable(${test_name} ${test_src})
+        add_dependencies(check ${test_name})
         target_link_libraries(${test_name} bbs ${CHECK_LIBRARIES} pthread)
 
         add_test(${test_name} ${test_name})
