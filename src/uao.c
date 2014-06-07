@@ -140,11 +140,8 @@ static int convert(const struct Config *config, const char *input, char *output,
     while (input[0]) {
         int input_len = config->copy_input(input, buf);
 
-        printf("input_len = %d, buf = %s\n", input_len, buf);
-
         if (input_len == 1) {
             // ASCII
-            printf("output = %p, output_len = %zd\n", output, output_len);
             UPDATE_OUTPUT(output, output_len, buf);
         } else {
             struct Big5_UTF8_Table *res = bsearch(buf, config->table, config->table_len, sizeof(config->table[0]), config->compare);
