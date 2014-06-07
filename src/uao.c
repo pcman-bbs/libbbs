@@ -32,7 +32,7 @@ struct Config {
     const char *(*get_output)(const struct Big5_UTF8_Table *table);
 };
 
-const char UNKNOWN_CHAR = '?';
+const char UNKNOWN_CHAR[] = "?";
 
 static int big5_to_utf8_compare(const void *x, const void *y)
 {
@@ -52,7 +52,7 @@ static int big5_to_utf8_copy_input(const char *input, char input_buf[static 3])
             return 2;
         } else {
             // Broken big5.
-            input_buf[0] = UNKNOWN_CHAR;
+            input_buf[0] = UNKNOWN_CHAR[0];
             input_buf[1] = 0;
             return 1;
         }
@@ -152,7 +152,7 @@ static int convert(const struct Config *config, const char *input, char *output,
             if (res) {
                 UPDATE_OUTPUT(output, output_len, config->get_output(res));
             } else {
-                UPDATE_OUTPUT(output, output_len, &UNKNOWN_CHAR);
+                UPDATE_OUTPUT(output, output_len, UNKNOWN_CHAR);
             }
         }
 
