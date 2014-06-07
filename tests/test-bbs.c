@@ -21,7 +21,7 @@
 
 START_TEST(test_new_delete)
 {
-    struct BBSContext *ctx = bbs_new();
+    struct BBSContext *ctx = bbs_new(0, 0);
     ck_assert_ptr_ne(ctx, 0);
 
     bbs_delete(&ctx);

@@ -19,12 +19,17 @@
 
 #include <stdlib.h>
 
-struct BBSContext *bbs_new()
+#include "util.h"
+
+struct BBSContext *bbs_new(BBSLogger logger, void *logger_data)
 {
     struct BBSContext *ctx = malloc(sizeof(*ctx));
     if (!ctx) {
         goto error;
     }
+
+    ctx->logger = logger;
+    ctx->logger_data = logger_data;
 
     return ctx;
 

@@ -17,9 +17,5 @@
  */
 #pragma once
 
-struct BBSContext;
 
-typedef void (*BBSLogger)(void *data, int level, const char *fmt, ...);
-
-struct BBSContext *bbs_new(BBSLogger logger, void *logger_data);
-void bbs_delete(struct BBSContext **ctx);
+void null_logger(void *data, int level, const char *fmt, ...);

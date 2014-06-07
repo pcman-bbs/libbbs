@@ -20,4 +20,6 @@
 #include <bbs.h>
 
 struct BBSContext {
+    BBSLogger logger;
+    void *logger_data;
 };
