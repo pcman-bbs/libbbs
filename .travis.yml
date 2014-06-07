@@ -2,14 +2,14 @@ language:
     - c
 
 compiler: gcc
-env: CFLAGS='-Wall -Werror'
+env: CTEST_OUTPUT_ON_FAILURE=1 CFLAGS='-Wall -Werror'
 
 matrix:
     include:
         - compiler: clang
-          env: CFLAGS='-Wall -Werror' CMAKE_OPTIONS='-DCMAKE_C_FLAGS=-fsanitize=address -DUSE_VALGRIND=no'
+          env: CTEST_OUTPUT_ON_FAILURE=1 CFLAGS='-Wall -Werror' CMAKE_OPTIONS='-DCMAKE_C_FLAGS=-fsanitize=address -DUSE_VALGRIND=no'
         - compiler: gcc
-          env: CFLAGS='-Wall -Werror' COVERALLS=yes CMAKE_OPTIONS='-DENABLE_GCOV=yes -DUSE_VALGRIND=no'
+          env: CTEST_OUTPUT_ON_FAILURE=1CFLAGS='-Wall -Werror' COVERALLS=yes CMAKE_OPTIONS='-DENABLE_GCOV=yes -DUSE_VALGRIND=no'
 
 before_install:
     - sudo pip install cpp-coveralls
