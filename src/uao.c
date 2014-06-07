@@ -58,7 +58,7 @@ static int big5_to_utf8_copy_input(const char *input, char input_buf[static 3])
 
 static int big5_to_utf8_get_output(const struct Big5_UTF8_Table *table, char *output, size_t output_len)
 {
-    strncpy(output, output_len, table->utf8);
+    strncpy(output, table->utf8, output_len);
     return strlen(table->utf8);
 }
 
@@ -94,7 +94,7 @@ static int utf8_to_big5_copy_input(const char *input, char input_buf[static 3])
 
 static int utf8_to_big5_get_output(const struct Big5_UTF8_Table *table, char *output, size_t output_len)
 {
-    strncpy(output, output_len, table->big5);
+    strncpy(output, table->big5, output_len);
     return strlen(table->big5);
 }
 
