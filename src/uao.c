@@ -111,7 +111,7 @@ const struct Config UTF8_TO_BIG5_CONFIG = {
     utf8_to_big5_get_output,
 };
 
-#define UPDATE_OUTPUT(output, output_len, input) \
+#define UPDATE_OUTPUT(final_len, output, output_len, input) \
     do { \
         int len = strlen(input); \
         if (output_len > len) { \
@@ -142,14 +142,14 @@ static int convert(const struct Config *config, const char *input, char *output,
 
         if (input_len == 1) {
             // ASCII
-            UPDATE_OUTPUT(output, output_len, buf);
+            UPDATE_OUTPUT(final_len, output, output_len, buf);
         } else {
             struct Big5_UTF8_Table *res = bsearch(buf, config->table, config->table_len, sizeof(config->table[0]), config->compare);
 
             if (res) {
-                UPDATE_OUTPUT(output, output_len, config->get_output(res));
+                UPDATE_OUTPUT(final_len, output, output_len, config->get_output(res));
             } else {
-                UPDATE_OUTPUT(output, output_len, UNKNOWN_CHAR);
+                UPDATE_OUTPUT(final_len, output, output_len, UNKNOWN_CHAR);
             }
         }
 
