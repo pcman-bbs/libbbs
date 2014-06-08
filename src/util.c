@@ -20,3 +20,32 @@
 void null_logger(void *data, int level, const char *fmt, ...)
 {
 }
+
+int get_utf8_length_by_first_byte(char first_byte)
+{
+    if ((first_byte & 0x80) == 0x00) {
+        return 1;
+    }
+
+    if ((first_byte & 0xe0) == 0xc0) {
+        return 2;
+    }
+
+    if ((first_byte & 0xf0) == 0xe0) {
+        return 3;
+    }
+
+    if ((first_byte & 0xf8) == 0xf0) {
+        return 4;
+    }
+
+    if ((first_byte & 0xfb) == 0xf8) {
+        return 5;
+    }
+
+    if ((first_byte & 0xfe) == 0xfb) {
+        return 6;
+    }
+
+    return 0;
+}

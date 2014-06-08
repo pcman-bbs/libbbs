@@ -31,3 +31,4 @@
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
 void null_logger(void *data, int level, const char *fmt, ...);
+int get_utf8_length_by_first_byte(char first_byte);
