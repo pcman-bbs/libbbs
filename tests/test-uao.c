@@ -22,8 +22,14 @@
 const char BIG5_STRING[] = "convert test string: \x81\x40\xa0\xa6\xa0\xa7\x98\x41!";
 const char UTF8_STRING[] = "convert test string: \xe4\xb8\x97\xee\xb9\x9f\xc3\x80\xe2\x9d\xb6!";
 
+// FIXME: bbs_big5_to_utf8 shall not return unicode compatibility character
 const char BIG5_DUPLICATED[] = "\xc9\x4a\xa4\x61 \xdd\xfc\xdc\xd1";
 const char UTF8_DUPLICATED[] = "\xef\xa8\x8c\xe5\x85\x80 \xef\xa8\x8d\xe5\x97\x80";
+
+// FIXME: bbs_utf8_to_big5 shall return the same big5 character for unicode and
+// its compatibility counterpart.
+const char UTF8_COMPATIBLIITY[] = "\xef\xa8\x8c\xe5\x85\x80 \xef\xa8\x8d\xe5\x97\x80";
+const char BIG5_COMPATIBILITY[] = "\xc9\x4a\xa4\x61 \xdd\xfc\xdc\xd1";
 
 START_TEST(test_big5_to_utf8)
 {
