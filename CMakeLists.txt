@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.8)
 project(libbbs)
 
 set(PROJECT_VERSION_MAJOR "0")
@@ -13,7 +13,7 @@ include(GNUInstallDirs)
 if(${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
     set(CMAKE_C_FLAGS "-g -O2 -Wall -Werror -fPIC -std=c99 ${CMAKE_C_FLAGS}")
 
-    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--version-script=${PROJECT_SOURCE_DIR}/src/libbbs.ver ${CMAKE_SHARED_LINKER_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--version-script=${PROJECT_SOURCE_DIR}/libbbs.ver ${CMAKE_SHARED_LINKER_FLAGS}")
 
     option(ENABLE_GCOV "Coverage support" false)
     if(ENABLE_GCOV)
@@ -40,14 +40,24 @@ configure_file(${pkgconfig_src} ${pkgconfig})
 
 # libbbs
 include_directories(${PROJECT_SOURCE_DIR}/include)
+
 file(GLOB bbs_inc ${PROJECT_SOURCE_DIR}/include/*)
 file(GLOB bbs_src ${PROJECT_SOURCE_DIR}/src/*)
-add_library(bbs SHARED ${bbs_inc} ${bbs_src})
-set_target_properties(bbs PROPERTIES
+
+add_library(bbs OBJECT
+    ${bbs_inc}
+    ${bbs_src}
+)
+
+add_library(bbs_shared SHARED
+    $<TARGET_OBJECTS:bbs>
+    ${PROJECT_SOURCE_DIR}/libbbs.ver
+)
+set_target_properties(bbs_shared PROPERTIES
+    OUTPUT_NAME bbs
     SOVERSION 0
     VERSION 0.0.0
 )
-add_library(bbs_static ${bbs_inc} ${bbs_src})
 
 # testing
 pkg_check_modules(CHECK check)
@@ -70,7 +80,7 @@ if ("${CHECK_FOUND}")
         get_filename_component(test_name ${test_src} NAME_WE)
         add_executable(${test_name} ${test_src})
         add_dependencies(check ${test_name})
-        target_link_libraries(${test_name} bbs ${CHECK_LIBRARIES} pthread)
+        target_link_libraries(${test_name} bbs_shared ${CHECK_LIBRARIES} pthread)
 
         add_test(${test_name} ${test_name})
         if (VALGRIND)
@@ -81,9 +91,9 @@ if ("${CHECK_FOUND}")
     file(GLOB test_private_src ${PROJECT_SOURCE_DIR}/tests/private/*)
     foreach(test_src ${test_private_src})
         get_filename_component(test_name ${test_src} NAME_WE)
-        add_executable(${test_name} ${test_src})
+        add_executable(${test_name} ${test_src} $<TARGET_OBJECTS:bbs>)
         add_dependencies(check ${test_name})
-        target_link_libraries(${test_name} bbs_static ${CHECK_LIBRARIES} pthread)
+        target_link_libraries(${test_name} ${CHECK_LIBRARIES} pthread)
 
         add_test(${test_name} ${test_name})
         if (VALGRIND)
