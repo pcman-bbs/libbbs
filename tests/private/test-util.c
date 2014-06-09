@@ -44,13 +44,26 @@ START_TEST(test_get_utf8_length_by_first_byte)
 }
 END_TEST
 
+START_TEST(test_is_utf8_continuation_byte)
+{
+    ck_assert_int_eq(is_utf8_continuation_byte(UTF8_4_BYTE_FIRST[0]), 0);
+    ck_assert_int_eq(is_utf8_continuation_byte(UTF8_4_BYTE_FIRST[1]), 1);
+    ck_assert_int_eq(is_utf8_continuation_byte(UTF8_4_BYTE_FIRST[2]), 1);
+    ck_assert_int_eq(is_utf8_continuation_byte(UTF8_4_BYTE_FIRST[3]), 1);
+}
+END_TEST
+
 int main (int argc, char *argv[]) {
     Suite *suite = suite_create("test-util");
 
-    TCase *tcase = tcase_create("get_utf8_length_by_first_byte");
-    tcase_add_test(tcase, test_get_utf8_length_by_first_byte);
+    TCase *tcase_get_utf8_length_by_first_byte = tcase_create("get_utf8_length_by_first_byte");
+    tcase_add_test(tcase_get_utf8_length_by_first_byte, test_get_utf8_length_by_first_byte);
 
-    suite_add_tcase(suite, tcase);
+    TCase *tcase_is_utf8_continuation_byte = tcase_create("is_utf8_continuation_byte");
+    tcase_add_test(tcase_is_utf8_continuation_byte, test_is_utf8_continuation_byte);
+
+    suite_add_tcase(suite, tcase_get_utf8_length_by_first_byte);
+    suite_add_tcase(suite, tcase_is_utf8_continuation_byte);
 
     SRunner *runner = srunner_create(suite);
     srunner_run_all(runner, CK_NORMAL);

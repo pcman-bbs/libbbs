@@ -41,3 +41,8 @@ int get_utf8_length_by_first_byte(char first_byte)
 
     return 0;
 }
+
+int is_utf8_continuation_byte(char byte)
+{
+    return (byte & 0xc0) == 0x80;
+}

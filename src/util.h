@@ -32,3 +32,4 @@
 
 void null_logger(void *data, int level, const char *fmt, ...);
 int get_utf8_length_by_first_byte(char first_byte);
+int is_utf8_continuation_byte(char byte);
