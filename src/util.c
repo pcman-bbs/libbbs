@@ -39,13 +39,5 @@ int get_utf8_length_by_first_byte(char first_byte)
         return 4;
     }
 
-    if ((first_byte & 0xfb) == 0xf8) {
-        return 5;
-    }
-
-    if ((first_byte & 0xfe) == 0xfb) {
-        return 6;
-    }
-
     return 0;
 }

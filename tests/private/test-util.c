@@ -19,9 +19,28 @@
 
 #include <util.h>
 
+const char UTF8_1_BYTE_FIRST[] = "\x00";
+const char UTF8_1_BYTE_LAST[]  = "\x7f";
+const char UTF8_2_BYTE_FIRST[] = "\xc2\x80";
+const char UTF8_2_BYTE_LAST[]  = "\xdf\xbf";
+const char UTF8_3_BYTE_FIRST[] = "\xe0\xa0\x80";
+const char UTF8_3_BYTE_LAST[]  = "\xef\xbf\xbf";
+const char UTF8_4_BYTE_FIRST[] = "\xf0\x90\x80\x80";
+const char UTF8_4_BYTE_LAST[]  = "\xf4\x8f\xbf\xbf";
+
 START_TEST(test_get_utf8_length_by_first_byte)
 {
-    ck_assert_int_eq(get_utf8_length_by_first_byte('a'), 1);
+    ck_assert_int_eq(get_utf8_length_by_first_byte(UTF8_1_BYTE_FIRST[0]), 1);
+    ck_assert_int_eq(get_utf8_length_by_first_byte(UTF8_1_BYTE_LAST[0]), 1);
+
+    ck_assert_int_eq(get_utf8_length_by_first_byte(UTF8_2_BYTE_FIRST[0]), 2);
+    ck_assert_int_eq(get_utf8_length_by_first_byte(UTF8_2_BYTE_LAST[0]), 2);
+
+    ck_assert_int_eq(get_utf8_length_by_first_byte(UTF8_3_BYTE_FIRST[0]), 3);
+    ck_assert_int_eq(get_utf8_length_by_first_byte(UTF8_3_BYTE_LAST[0]), 3);
+
+    ck_assert_int_eq(get_utf8_length_by_first_byte(UTF8_4_BYTE_FIRST[0]), 4);
+    ck_assert_int_eq(get_utf8_length_by_first_byte(UTF8_4_BYTE_LAST[0]), 4);
 }
 END_TEST
 
