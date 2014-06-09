@@ -42,17 +42,18 @@ configure_file(${pkgconfig_src} ${pkgconfig})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB bbs_inc ${PROJECT_SOURCE_DIR}/include/*)
 file(GLOB bbs_src ${PROJECT_SOURCE_DIR}/src/*)
-add_library(bbs SHARED ${bbs_src})
+add_library(bbs SHARED ${bbs_inc} ${bbs_src})
 set_target_properties(bbs PROPERTIES
     SOVERSION 0
     VERSION 0.0.0
 )
+add_library(bbs_static ${bbs_inc} ${bbs_src})
 
 # testing
 pkg_check_modules(CHECK check)
 
 if ("${CHECK_FOUND}")
-    include_directories(${CHECK_INCLUDE_DIRS})
+    include_directories(${CHECK_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/src)
 
     enable_testing()
     option(USE_VALGRIND "Use valgrind when testing" true)
@@ -63,9 +64,9 @@ if ("${CHECK_FOUND}")
         find_program(VALGRIND valgrind)
     endif()
 
-    file(GLOB bbs_test_src ${PROJECT_SOURCE_DIR}/tests/*)
+    file(GLOB test_api_src ${PROJECT_SOURCE_DIR}/tests/api/*)
 
-    foreach(test_src ${bbs_test_src})
+    foreach(test_src ${test_api_src})
         get_filename_component(test_name ${test_src} NAME_WE)
         add_executable(${test_name} ${test_src})
         add_dependencies(check ${test_name})
@@ -76,6 +77,20 @@ if ("${CHECK_FOUND}")
             add_test("valgrind-${test_name}" ${VALGRIND} --error-exitcode=255 --leak-check=full --suppressions=${PROJECT_SOURCE_DIR}/valgrind.supp ${PROJECT_BINARY_DIR}/${test_name})
         endif()
     endforeach()
+
+    file(GLOB test_private_src ${PROJECT_SOURCE_DIR}/tests/private/*)
+    foreach(test_src ${test_private_src})
+        get_filename_component(test_name ${test_src} NAME_WE)
+        add_executable(${test_name} ${test_src})
+        add_dependencies(check ${test_name})
+        target_link_libraries(${test_name} bbs_static ${CHECK_LIBRARIES} pthread)
+
+        add_test(${test_name} ${test_name})
+        if (VALGRIND)
+            add_test("valgrind-${test_name}" ${VALGRIND} --error-exitcode=255 --leak-check=full --suppressions=${PROJECT_SOURCE_DIR}/valgrind.supp ${PROJECT_BINARY_DIR}/${test_name})
+        endif()
+    endforeach()
+
 endif()
 
 # install
