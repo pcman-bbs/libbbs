@@ -83,19 +83,33 @@ static int utf8_to_big5_compare(const void *x, const void *y)
         ((struct Big5_UTF8_Table *)y)->utf8);
 }
 
-static int utf8_to_big5_copy_input(const char *input, char input_buf[static 3])
+static int utf8_to_big5_copy_input(const char *input, char input_buf[static 5])
 {
     assert(input);
 
-    if (input[0] & 0x80) {
-        // FIXME: copy single UTF8 character
-        // FIXME: How to handle UTF8 encode error?
-        return 0;
+    int len = get_utf8_length_by_first_byte(input[0]);
+
+    if (len == 1) {
+        input_buf[0] = input[0];
+        input_buf[1] = 0;
+        return 1;
     }
 
-    input_buf[0] = input[0];
-    input_buf[1] = 0;
-    return 1;
+    if (len == 0) {
+        strcpy(input_buf, UNKNOWN_CHAR);
+        return 1;
+    }
+
+    for (int i = 1; i < len; ++i) {
+        if (input[i] == 0x00 || !is_utf8_continuation_byte(input[i])) {
+            strcpy(input_buf, UNKNOWN_CHAR);
+            return i + 1;
+        }
+    }
+
+    memcpy(input_buf, input, len);
+    input_buf[len] = 0;
+    return len;
 }
 
 static const char* utf8_to_big5_get_output(const struct Big5_UTF8_Table *table)

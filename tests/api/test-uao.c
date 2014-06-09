@@ -28,7 +28,7 @@ const char UTF8_DUPLICATED[] = "\xef\xa8\x8c\xe5\x85\x80 \xef\xa8\x8d\xe5\x97\x8
 
 // FIXME: bbs_utf8_to_big5 shall return the same big5 character for unicode and
 // its compatibility counterpart.
-const char UTF8_COMPATIBLIITY[] = "\xef\xa8\x8c\xe5\x85\x80 \xef\xa8\x8d\xe5\x97\x80";
+const char UTF8_COMPATIBILITY[] = "\xef\xa8\x8c\xe5\x85\x80 \xef\xa8\x8d\xe5\x97\x80";
 const char BIG5_COMPATIBILITY[] = "\xc9\x4a\xa4\x61 \xdd\xfc\xdc\xd1";
 
 START_TEST(test_big5_to_utf8)
@@ -68,17 +68,42 @@ START_TEST(test_big5_to_utf8_broken_big5)
 }
 END_TEST
 
-START_TEST(test_utf8_to_big5_no_output_ascii)
+START_TEST(test_utf8_to_big5)
 {
-    ck_assert_int_eq(bbs_utf8_to_big5("test", 0, 0), 4);
+    char buf[100];
+    ck_assert_int_eq(bbs_utf8_to_big5(UTF8_STRING, buf, sizeof(buf)), strlen(BIG5_STRING));
+    ck_assert_str_eq(buf, BIG5_STRING);
 }
 END_TEST
 
-START_TEST(test_utf8_to_big5_ascii)
+START_TEST(test_utf8_to_big5_compatibility)
 {
-    char big5[5];
-    ck_assert_int_eq(bbs_utf8_to_big5("test", big5, sizeof(big5)), 4);
-    ck_assert_str_eq(big5, "test");
+    char buf[100];
+    ck_assert_int_eq(bbs_utf8_to_big5(UTF8_COMPATIBILITY, buf, sizeof(buf)), strlen(BIG5_COMPATIBILITY));
+    ck_assert_str_eq(buf, BIG5_COMPATIBILITY);
+}
+END_TEST
+
+START_TEST(test_utf8_to_big5_output_not_enough)
+{
+    char buf[5];
+    ck_assert_int_eq(bbs_utf8_to_big5(UTF8_STRING, buf, sizeof(buf)), strlen(BIG5_STRING));
+}
+END_TEST
+
+START_TEST(test_utf8_to_big5_no_output)
+{
+    ck_assert_int_eq(bbs_utf8_to_big5(UTF8_STRING, 0, 0), strlen(BIG5_STRING));
+}
+END_TEST
+
+START_TEST(test_big5_to_utf8_broken_utf8)
+{
+    char buf[5];
+    const char UTF8[] = "\xf4\x80";
+    const char BIG5[] = "?";
+    ck_assert_int_eq(bbs_utf8_to_big5(UTF8, buf, sizeof(buf)), strlen(BIG5));
+    ck_assert_str_eq(buf, BIG5);
 }
 END_TEST
 
@@ -93,8 +118,11 @@ int main (int argc, char *argv[]) {
     tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_broken_big5);
 
     TCase *tcase_bbs_utf8_to_big5 = tcase_create("bbs_utf8_to_big5");
-    tcase_add_test(tcase_bbs_utf8_to_big5, test_utf8_to_big5_no_output_ascii);
-    tcase_add_test(tcase_bbs_utf8_to_big5, test_utf8_to_big5_ascii);
+    tcase_add_test(tcase_bbs_utf8_to_big5, test_utf8_to_big5);
+    tcase_add_test(tcase_bbs_utf8_to_big5, test_utf8_to_big5_compatibility);
+    tcase_add_test(tcase_bbs_utf8_to_big5, test_utf8_to_big5_output_not_enough);
+    tcase_add_test(tcase_bbs_utf8_to_big5, test_utf8_to_big5_no_output);
+    tcase_add_test(tcase_bbs_big5_to_utf8, test_big5_to_utf8_broken_utf8);
 
     suite_add_tcase(suite, tcase_bbs_big5_to_utf8);
     suite_add_tcase(suite, tcase_bbs_utf8_to_big5);
