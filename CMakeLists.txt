@@ -106,7 +106,7 @@ endif()
 # install
 install(FILES ${bbs_inc} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/bbs)
 install(FILES ${pkgconfig} DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-install(TARGETS ${bbs} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS bbs_shared DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # package
 set(CPACK_SOURCE_GENERATOR TGZ)
