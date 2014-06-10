@@ -103,7 +103,7 @@ static int utf8_to_big5_copy_input(const char *input, char input_buf[static 5])
     for (int i = 1; i < len; ++i) {
         if (input[i] == 0x00 || !is_utf8_continuation_byte(input[i])) {
             strcpy(input_buf, UNKNOWN_CHAR);
-            return i + 1;
+            return i;
         }
     }
 
