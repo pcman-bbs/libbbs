@@ -6,3 +6,9 @@
    fun:srunner_run
    fun:main
 }
+{
+   libdl
+   Memcheck:Cond
+   fun:index
+   fun:expand_dynamic_string_token
+}
