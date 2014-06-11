@@ -23,6 +23,12 @@ make
 make test
 ```
 
+# PPA
+
+The daily build of libbbs can be found in the following PPA.
+
+*   <https://launchpad.net/~pcman-bbs/+archive/libbbs-daily>
+
 # Feature Request & Issue
 
 Please report feature request and/or issue in <https://github.com/pcman-bbs/libbbs/issues>.
