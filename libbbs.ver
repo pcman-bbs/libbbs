@@ -1,7 +1,5 @@
 LIBBBS_0.0.0 {
     global:
-        bbs_new;
-        bbs_delete;
         bbs_big5_to_utf8;
         bbs_utf8_to_big5;
     local:

@@ -17,19 +17,7 @@
  */
 #pragma once
 
-#define LOG_VERBOSE(fmt, ...) \
-    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_VERBOSE, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
-#define LOG_DEBUG(fmt, ...) \
-    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_DEBUG, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
-#define LOG_INFO(fmt, ...) \
-    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_INFO, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
-#define LOG_WARN(fmt, ...) \
-    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_WARN, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
-#define LOG_ERROR(fmt, ...) \
-    do { ctx->logger(ctx->logger_data, BBS_LOG_LEVEL_ERROR, "[%s:%d]" #fmt, __FILE__, __LINE__, ##__VA_ARGS__); } while (0)
-
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
-void null_logger(void *data, int level, const char *fmt, ...);
 int get_utf8_length_by_first_byte(char first_byte);
 int is_utf8_continuation_byte(char byte);

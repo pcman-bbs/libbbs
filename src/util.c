@@ -17,10 +17,6 @@
  */
 #include "util.h"
 
-void null_logger(void *data, int level, const char *fmt, ...)
-{
-}
-
 int get_utf8_length_by_first_byte(char first_byte)
 {
     if ((first_byte & 0x80) == 0x00) {
