@@ -125,19 +125,16 @@ const struct Config UTF8_TO_BIG5_CONFIG = {
     utf8_to_big5_get_output,
 };
 
-#define UPDATE_OUTPUT(final_len, output, output_len, input) \
-    do { \
-        int len = strlen(input); \
-        if (output_len > len) { \
-            memcpy(output, input, len); \
-            output_len -= len; \
-            output += len; \
-        } else if (output_len > 0) { \
-            output[0] = 0; \
-            output_len = 0; \
-        } \
-        final_len += len; \
-    } while (0)
+static int update_output(char *output, size_t output_len, const char *input)
+{
+    int len = strlen(input);
+    if (output_len > len) {
+        memcpy(output, input, len);
+    } else if (output_len > 0) {
+        output[0] = 0;
+    }
+    return len;
+}
 
 static int convert(const struct Config *config, const char *input, char *output, size_t output_len)
 {
@@ -153,25 +150,33 @@ static int convert(const struct Config *config, const char *input, char *output,
 
     while (input[0]) {
         int input_len = config->copy_input(input, buf);
+        int len;
 
         if (input_len == 1) {
             // ASCII
-            UPDATE_OUTPUT(final_len, output, output_len, buf);
+            len = update_output(output, output_len, buf);
+
         } else {
             struct Big5_UTF8_Table *res = bsearch(buf, config->table, config->table_len, sizeof(config->table[0]), config->compare);
 
             if (res) {
-                UPDATE_OUTPUT(final_len, output, output_len, config->get_output(res));
+                len = update_output(output, output_len, config->get_output(res));
             } else {
-                UPDATE_OUTPUT(final_len, output, output_len, UNKNOWN_CHAR);
+                len = update_output(output, output_len, UNKNOWN_CHAR);
             }
         }
 
-        if (output_len > 0) {
-            output[0] = 0;
+        if (len < output_len) {
+            output += len;
+            output_len -= len;
         }
 
+        final_len += len;
         input += input_len;
+    }
+
+    if (output_len > 0) {
+        output[0] = 0;
     }
 
     return final_len;
