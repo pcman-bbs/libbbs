@@ -4,6 +4,9 @@ language:
 compiler: gcc
 env: CTEST_OUTPUT_ON_FAILURE=1 CFLAGS='-Wall -Werror'
 
+git:
+  depth: 1
+ 
 matrix:
     include:
         - compiler: clang
